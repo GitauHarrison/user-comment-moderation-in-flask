@@ -45,10 +45,10 @@ $ cd user-comment-moderation-in-flask
 3. Create and activate your virtual environment:
 
 ```python
-$ mkvirtualenv comment_moderation
+$ mkvirtualenv comment_moderation # I am using virtualenvwrapper
 ```
 
-4. Install project dependencies within yoru virtual environment:
+4. Install project dependencies within your active virtual environment:
 
 ```python
 (comment_moderation)$ pip3 install -r requirements.txt
