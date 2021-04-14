@@ -56,18 +56,18 @@ $ mkvirtualenv comment_moderation
 (comment_moderation)$ flask run
 ```
 
-## Usage
+## Usage Locally
 
-* Post several comments from the home page using dummy credentials
+* Post several comments from the [_Home_](http://127.0.0.1:5000/home) page using dummy credentials
 
-* Click on the _Admin_ page to access all user comments posted on the blog
+* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) page to access all user comments posted on the blog
 
-* You will need to register first, so create a dummy admin account
+* You will need to [register](http://127.0.0.1:5000/register) first, so create a dummy admin account
 
-* Log into the admin account. You should be able to see all user comments
+* [Log](http://127.0.0.1:5000/login?next=%2Fadmin) into the new admin account. You should be able to see all user comments
 
 * Click _Delete_ link to delete a user's comment
 
-* Click _Allow_ to allow a user's comment to appear in the home page
+* Click _Allow_ to allow a user's comment to appear in the [_Home_](http://127.0.0.1:5000/home) page
 
-* Navigate to the _Home_ page to see all "Allowed" comments
+* Navigate to the [_Home_](http://127.0.0.1:5000/home) page to see all "Allowed" comments
