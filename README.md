@@ -55,3 +55,19 @@ $ mkvirtualenv comment_moderation
 ```python
 (comment_moderation)$ flask run
 ```
+
+## Usage
+
+* Post several comments from the home page using dummy credentials
+
+* Click on the _Admin_ page to access all user comments posted on the blog
+
+* You will need to register first, so create a dummy admin account
+
+* Log into the admin account. You should be able to see all user comments
+
+* Click _Delete_ link to delete a user's comment
+
+* Click _Allow_ to allow a user's comment to appear in the home page
+
+* Navigate to the _Home_ page to see all "Allowed" comments
