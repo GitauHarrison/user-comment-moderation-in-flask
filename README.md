@@ -24,6 +24,10 @@ If you run a blog, you may desire to have control over what users of your blog p
 * Email validator to ensure user emails are valid
 * Python dotenv to load hidden environment variables
 
+## Project Design
+
+* [Comment Moderation App Design Using Figma](https://www.figma.com/proto/M6vfs6SOptVVh1WgmGgQxa/Comment-Moderation-Demo?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1)
+
 ## Testing Locally
 
 1. Clone this repo:
