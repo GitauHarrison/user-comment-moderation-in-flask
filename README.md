@@ -1,4 +1,4 @@
-# Add Comment Moderation to Flask Blog
+# Add Comment Moderation to a Flask Blog
 
 ![User Comment Moderation](app/static/images/user_comment_moderation.gif)
 
