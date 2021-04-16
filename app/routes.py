@@ -12,12 +12,22 @@ from werkzeug.urls import url_parse
 def home():
     form = CommentForm()
     if form.validate_on_submit():
-        user = Comment(username=form.username.data, email=form.email.data, comment=form.comment.data)
+        user = Comment(username=form.username.data,
+                       email=form.email.data,
+                       comment=form.comment.data)
         db.session.add(user)
         db.session.commit()
-        flash('You will receive an email confirmation when your comment is live')
+        flash('You will receive an email confirmation '
+              'when your comment is live')
         return redirect(url_for('home'))
-    return render_template('home.html', title='Home', form=form)
+    allowed_user_comments = Comment.query.filter_by(allowed_comment=1).all()
+    total_comments_allowed = len(allowed_user_comments)
+    return render_template('home.html',
+                           title='Home',
+                           form=form,
+                           allowed_user_comments=allowed_user_comments,
+                           total_comments_allowed=total_comments_allowed
+                           )
 
 
 @app.route('/admin')
@@ -56,13 +66,20 @@ def delete_user_comment(id):
     for user_comment in user_list:
         db.session.delete(user_comment)
         db.session.commit()
-        flash(f'You have deleted the comment made by {user_comment.username}, id {user_comment.id}')
+        flash('You have deleted the comment made by '
+              f'{user_comment.username}, id {user_comment.id}')
         return redirect(url_for('admin'))
 
 
-@app.route('/allow-user-comment')
-def allow_user_comment():
-    return redirect(url_for('home'))
+@app.route('/allow-user-comment/<id>')
+def allow_user_comment(id):
+    user = Comment.query.filter_by(allowed_comment=0).first()
+    print(user)
+    user.allowed_comment = 1
+    db.session.add(user)
+    db.session.commit()
+    flash(f'You have allowed the comment from {user.username}, id {user.id}')
+    return redirect(url_for('admin'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
