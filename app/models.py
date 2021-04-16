@@ -26,9 +26,10 @@ class Comment(db.Model):
     email = db.Column(db.String(120), index=True, nullable=False)
     comment = db.Column(db.String(300))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    allowed_comment = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return '<Comment {}>'.format(self.comment)
+        return f'<Comment {self.id}, {self.username}, {self.comment}, {self.allowed_comment}>'
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
