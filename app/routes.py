@@ -60,25 +60,24 @@ def admin():
 
 @app.route('/delete-user-comment/<id>')
 def delete_user_comment(id):
-    user_list = Comment.query.order_by(
-        Comment.timestamp.desc()
-    )
-    for user_comment in user_list:
-        db.session.delete(user_comment)
-        db.session.commit()
-        flash('You have deleted the comment made by '
-              f'{user_comment.username}, id {user_comment.id}')
-        return redirect(url_for('admin'))
-
+    user = Comment.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('You have deleted the comment made by '
+          f'{user.username}, id {user.id}')
+    return redirect(url_for('admin'))
 
 @app.route('/allow-user-comment/<id>')
 def allow_user_comment(id):
-    user = Comment.query.filter_by(allowed_comment=0).first()
+    user = Comment.query.get(id)
     print(user)
-    user.allowed_comment = 1
-    db.session.add(user)
-    db.session.commit()
-    flash(f'You have allowed the comment from {user.username}, id {user.id}')
+    try:
+        user.allowed_comment = 1
+        db.session.add(user)
+        db.session.commit()
+        flash(f'You have allowed the comment from {user.username}, id {user.id}')
+    except AttributeError:
+        flash('Comment already allowed')
     return redirect(url_for('admin'))
 
 
