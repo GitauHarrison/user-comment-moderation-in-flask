@@ -1,6 +1,6 @@
 # Add Comment Moderation to a Flask Blog
 
-![User Comment Moderation](app/static/images/user_comment_moderation.gif)
+![User Comment Moderation](app/static/images/comment_moderation.gif)
 
 If you run a blog, you may desire to have control over what users of your blog post. You want to ensure that the comments featured in any of the blogs posted on your site align with your vision for the blog. Here, I show how this feature can be added to a blog built using Python and the Flask web framework.
 
@@ -77,6 +77,8 @@ Log in as Admin
 
 Allow/Delete Posts
 
+* Choose an article among the cards in the [Admin](http://127.0.0.1:5000/admin) page by clicking "Take Action" button
+
 * Click _Delete_ link to delete a user's comment
 
 * Click _Allow_ to allow a user's comment to appear in the [selected article](http://127.0.0.1:5000/article_1) page
@@ -89,7 +91,7 @@ Another try
 
 * Post several comments on the [selected article](http://127.0.0.1:5000/article_2) page using dummy credentials
 
-* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) link to access all user comments posted on the blog
+* Click on the [Admin](http://127.0.0.1:5000/login?next=%2Fadmin) link to access all user comments posted on the blog
 
 * Click _Delete_ link to delete a user's comment
 
