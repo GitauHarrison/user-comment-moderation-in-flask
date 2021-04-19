@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+        <div class="row">            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                <h1>Article 2</h1>
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting 
+                    industry. Lorem Ipsum has been the industry's standard dummy text 
+                    ever since the 1500s, when an unknown printer took a galley of type 
+                    and scrambled it to make a type specimen book.
+                </p>
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting 
+                    industry. Lorem Ipsum has been the industry's standard dummy text 
+                    ever since the 1500s, when an unknown printer took a galley of type 
+                    and scrambled it to make a type specimen book.
+                </p>
+            </div>
+        </div>
+        <div class="row">            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <p><strong>Leave a comment below:</strong></p>
+            </div>
+        </div>
+        <!-- Comments Section -->
+        <div class="row">            
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h3 id="comments">{{ all_user_comments }} Comments</h3>  
+
+                <!-- Comments Go Here -->
+                {% for user_comment in user_comments %}
+                    {% include '_admin_comments/_comments_article_2.html' %}
+                {% endfor %}                
+
+
+                        <!-- Pagination Links -->
+                        <nav aria-label="...">
+                            <ul class="pager">
+                                <li class="previous{% if not prev_url %} disabled{% endif %}">
+                                    <a href="{{ prev_url or '#' }}">
+                                        <span aria-hidden="true">&larr;</span> Newer Comments
+                                    </a>
+                                </li>
+                                <li class="next{% if not next_url %} disabled{% endif %}">
+                                    <a href="{{ next_url or '#' }}">
+                                        Older Comments <span aria-hidden="true">&rarr;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>   
+                        <!-- Comment Form Goes Here -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <!-- Empty div -->
+                            </div>
+                            <div class="col-md-4">
+                                {{ wtf.quick_form(form) }}
+                            </div>
+                            <div class="col-md-4">
+                                <!-- Empty div -->
+                            </div>
+                        </div>           
+            </div>
+        </div>        
+{% endblock %}
