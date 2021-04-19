@@ -62,16 +62,41 @@ $ mkvirtualenv comment_moderation # I am using virtualenvwrapper
 
 ## Usage Locally
 
-* Post several comments from the [_Home_](http://127.0.0.1:5000/home) page using dummy credentials
+Posting Comments
+* Click on the "Articles" dropdown link and select one article
 
-* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) page to access all user comments posted on the blog
+* Post several comments on the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page using dummy credentials
+
+Log in as Admin
+
+* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) link in the top-right navbar to access all user comments posted on the blog
 
 * You will need to [register](http://127.0.0.1:5000/register) first, so create a dummy admin account
 
 * [Log](http://127.0.0.1:5000/login?next=%2Fadmin) into the new admin account. You should be able to see all user comments
 
+Allow/Delete Posts
+
+* Click _Delete_ link to delete a user's comment
+
+* Click _Allow_ to allow a user's comment to appear in the [selected article](http://127.0.0.1:5000/article_1) page
+
+* Navigate to the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page to see all "Allowed" comments
+
+Another try
+
+* Select [another article (say article 2)](http://127.0.0.1:5000/article_2)
+
+* Post several comments on the [selected article](http://127.0.0.1:5000/article_2) page using dummy credentials
+
+* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) link to access all user comments posted on the blog
+
 * Click _Delete_ link to delete a user's comment
 
 * Click _Allow_ to allow a user's comment to appear in the [_Home_](http://127.0.0.1:5000/home) page
 
-* Navigate to the [_Home_](http://127.0.0.1:5000/home) page to see all "Allowed" comments
+* Navigate to the [selected article (article 2)](http://127.0.0.1:5000/article_2) page to see all "Allowed" comments
+
+Final Result
+
+* You can [log out](http://127.0.0.1:5000/logout) as an admin and your allowed articles should persist in the selected articles' pages
