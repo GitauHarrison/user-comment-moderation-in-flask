@@ -32,7 +32,7 @@ If you run a blog, you may desire to have control over what users of your blog p
 
 ## Deployed App
 
-[Comment Moderation App](https://comment-moderation-app.herokuapp.com/) on Heroku
+* [Comment Moderation App](https://comment-moderation-app.herokuapp.com/) on Heroku
 
 ## Testing Locally
 
@@ -71,43 +71,43 @@ $ mkvirtualenv comment_moderation # I am using virtualenvwrapper
 Posting Comments
 * Click on the "Articles" dropdown link and select one article
 
-* Post several comments on the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page using dummy credentials
+* Post several comments on the [selected article (say article 1)](https://comment-moderation-app.herokuapp.com/article_1) page using dummy credentials
 
 Log in as Admin
 
-* Click on the [_Admin_](http://127.0.0.1:5000/login?next=%2Fadmin) link in the top-right navbar to access all user comments posted on the blog
+* Click on the [Admin](https://comment-moderation-app.herokuapp.com/login?next=%2Fadmin) link in the top-right navbar to access all user comments posted on the blog
 
-* You will need to [register](http://127.0.0.1:5000/register) first, so create a dummy admin account
+* You will need to [register](https://comment-moderation-app.herokuapp.com/register) first, so create a dummy admin account
 
-* [Log](http://127.0.0.1:5000/login?next=%2Fadmin) into the new admin account. You should be able to see all user comments
+* [Log](https://comment-moderation-app.herokuapp.com/login?next=%2Fadmin) into the new admin account. You should be able to see all user comments
 
 Allow/Delete Posts
 
-* Choose an article among the cards in the [Admin](http://127.0.0.1:5000/admin) page by clicking "Take Action" button
+* Choose an article among the cards in the [Admin](https://comment-moderation-app.herokuapp.com/admin) page by clicking "Take Action" button
 
 * Click _Delete_ link to delete a user's comment
 
-* Click _Allow_ to allow a user's comment to appear in the [selected article](http://127.0.0.1:5000/article_1) page
+* Click _Allow_ to allow a user's comment to appear in the _selected article_ page
 
-* Navigate to the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page to see all "Allowed" comments
+* Navigate to the [selected article (say article 1)](https://comment-moderation-app.herokuapp.com/article_1) page to see all "Allowed" comments
 
 Another try
 
 * Select [another article (say article 2)](http://127.0.0.1:5000/article_2)
 
-* Post several comments on the [selected article](http://127.0.0.1:5000/article_2) page using dummy credentials
+* Post several comments on the [selected article](https://comment-moderation-app.herokuapp.com/article_2) page using dummy credentials
 
-* Click on the [Admin](http://127.0.0.1:5000/login?next=%2Fadmin) link to access all user comments posted on the blog
+* Click on the [Admin](https://comment-moderation-app.herokuapp.com/admin) link to access all user comments posted on the blog
 
 * Click _Delete_ link to delete a user's comment
 
-* Click _Allow_ to allow a user's comment to appear in the [_Home_](http://127.0.0.1:5000/home) page
+* Click _Allow_ to allow a user's comment to appear in the _article 2_ page
 
-* Navigate to the [selected article (article 2)](http://127.0.0.1:5000/article_2) page to see all "Allowed" comments
+* Navigate to the [selected article (article 2)](https://comment-moderation-app.herokuapp.com/article_2) page to see all "Allowed" comments
 
 Final Result
 
-* You can [log out](http://127.0.0.1:5000/logout) as an admin and your allowed articles should persist in the selected articles' pages
+* You can [log out](https://comment-moderation-app.herokuapp.com/logout) as an admin and your allowed comments should persist in the selected articles' pages
 
 ## Email Notification
 
