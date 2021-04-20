@@ -2,10 +2,50 @@ from app import app, db
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user
 from app.models import Admin, Comment, Article2
-from app.forms import LoginForm, RegisterForm, CommentForm
+from app.forms import LoginForm, RegisterForm, CommentForm,\
+    RequestPasswordResetForm, ResetPasswordForm
 from flask_login import login_required
 from werkzeug.urls import url_parse
-from app.email import send_live_comment_email
+from app.email import send_live_comment_email, send_password_reset_email
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('admin'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Admin.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('admin')
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = Admin(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered admin!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -29,6 +69,41 @@ def home():
                            allowed_user_comments=allowed_user_comments,
                            total_comments_allowed=total_comments_allowed
                            )
+
+
+@app.route('/request-password-reset', methods=['GET', 'POST'])
+def request_password_reset():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestPasswordResetForm()
+    if form.validate_on_submit():
+        admin = Admin.query.filter_by(email=form.email.data).first()
+        if admin:
+            send_password_reset_email(admin)
+        flash('Check your email for instructions to reset your password')
+        return redirect(url_for('login'))
+    return render_template('request_password_reset.html',
+                           title='Request Password Reset',
+                           form=form
+                           )
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    admin = Admin.verify_reset_password_token(token)
+    if not admin:
+        return redirect(url_for('home'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        admin.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html',
+                           title='Reset Password',
+                           form=form)
 
 
 # ======================
@@ -158,45 +233,6 @@ def allow_user_comment_article_2(id):
 # ========================
 # END OF ADMIN MANAGEMENT
 # ========================
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('admin'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = Admin.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('admin')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = RegisterForm()
-    if form.validate_on_submit():
-        user = Admin(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered admin!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
 
 
 # ---------------

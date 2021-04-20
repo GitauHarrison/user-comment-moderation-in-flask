@@ -24,3 +24,13 @@ def send_live_comment_email(user):
         text_body=render_template('email/live_comment.txt', user=user),
         html_body=render_template('email/live_comment.html', user=user)
     )
+
+
+def send_password_reset_email(user):
+    send_mail(
+        '[Password Reset]',
+        sender=app.config['ADMINS'][0],
+        recipients=[user.email],
+        text_body=render_template('email/reset_password.txt', user=user),
+        html_body=render_template('email/reset_password.html', user=user)
+    )
