@@ -5,6 +5,7 @@ from app.models import Admin, Comment, Article2
 from app.forms import LoginForm, RegisterForm, CommentForm
 from flask_login import login_required
 from werkzeug.urls import url_parse
+from app.email import send_live_comment_email
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -134,6 +135,7 @@ def allow_user_comment_article_1(id):
     db.session.commit()
     flash('You have allowed article1 comment from '
           f'{user.username}, id {user.id}')
+    send_live_comment_email(user)
     return redirect(url_for('admin_article_1'))
 
 
@@ -146,6 +148,7 @@ def allow_user_comment_article_2(id):
     db.session.commit()
     flash('You have allowed article2 comment from '
           f'{user.username}, id {user.id}')
+    send_live_comment_email(user)
     return redirect(url_for('admin_article_2'))
 
 # ---------------------
@@ -240,7 +243,7 @@ def article_2():
         return redirect(url_for('article_2'))
     allowed_user_comments = Article2.query.filter_by(allowed_comment=1).all()
     total_comments_allowed = len(allowed_user_comments)
-    return render_template('public_articles/article1.html',
+    return render_template('public_articles/article2.html',
                            title='Article 2',
                            form=form,
                            allowed_user_comments=allowed_user_comments,

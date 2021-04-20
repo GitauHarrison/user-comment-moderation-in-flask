@@ -1,0 +1,15 @@
+<p>Dear {{ user.username }},</p>
+<p>
+    Your comment is now live on the blog. You can check it out by visiting 
+    <a href="{{ url_for('home', _external=True) }}">this link</a>.
+</p>
+<p>
+    Alternatively, you can paste the link below in your browser's address bar:
+</p>
+<p>
+    {{ url_for('home', _external=True) }}
+</p>
+<P>Sincerely</P>
+<p>
+    The Comment Moderation Team
+</p>
