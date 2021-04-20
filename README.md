@@ -10,6 +10,7 @@ If you run a blog, you may desire to have control over what users of your blog p
 * Handling of user login sessions
 * Email Notification
 * Database management
+* Password reset
 
 ## Tools Used
 
@@ -23,11 +24,15 @@ If you run a blog, you may desire to have control over what users of your blog p
 * Flask bcrypt for extra password hashing
 * Email validator to ensure user emails are valid
 * Python dotenv to load hidden environment variables
+* Pyjwt for token generation
 
 ## Project Design
 
-* [Comment Moderation App Design Using Figma](https://www.figma.com/proto/M6vfs6SOptVVh1WgmGgQxa/Comment-Moderation-Demo?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1)
+* [Comment Moderation App Design](https://www.figma.com/proto/M6vfs6SOptVVh1WgmGgQxa/Comment-Moderation-Demo?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1) using Figma
 
+## Deployed App
+
+[Comment Moderation App](https://comment-moderation-app.herokuapp.com/) on Heroku
 
 ## Testing Locally
 
