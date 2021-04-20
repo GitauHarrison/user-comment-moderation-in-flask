@@ -31,6 +31,8 @@ class RegisterForm(FlaskForm):
 
 class CommentForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()],
+                        render_kw={'placeholder': 'Valid email address'})
     comment = TextAreaField('Your Comment')
     submit = SubmitField('Post')
