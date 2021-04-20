@@ -7,7 +7,7 @@ load_dotenv(basedir, '.env')
 
 class Config(object):
     # Database configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL?ssl=require') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -24,3 +24,6 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = os.environ.get('ADMINS')
+
+    # Heroku logs
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
