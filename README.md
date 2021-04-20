@@ -8,7 +8,7 @@ If you run a blog, you may desire to have control over what users of your blog p
 
 * User registration
 * Handling of user login sessions
-* Password reset 
+* Email Notification
 * Database management
 
 ## Tools Used
@@ -18,7 +18,7 @@ If you run a blog, you may desire to have control over what users of your blog p
 * Flask SQLAlchemy for creation of database
 * Flask migrate to handle database migrations
 * Flask bootstrap for styling and mobile responsiveness
-* Flask mail to handle password resets
+* Flask mail to handle email notification
 * Flask wtf for form creation
 * Flask bcrypt for extra password hashing
 * Email validator to ensure user emails are valid
@@ -27,6 +27,7 @@ If you run a blog, you may desire to have control over what users of your blog p
 ## Project Design
 
 * [Comment Moderation App Design Using Figma](https://www.figma.com/proto/M6vfs6SOptVVh1WgmGgQxa/Comment-Moderation-Demo?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1)
+
 
 ## Testing Locally
 
@@ -102,3 +103,13 @@ Another try
 Final Result
 
 * You can [log out](http://127.0.0.1:5000/logout) as an admin and your allowed articles should persist in the selected articles' pages
+
+## Email Notification
+
+Every time a comment is allowed to appear on an article's page by the admin, the user  will receive an email notification informing them that their comment is now live. They can follow the link sent to their email addresses to check the live comment.
+
+![Email Notification](app/static/images/email_notification.png)
+
+This feature is, however, limited to local usage using Flask Mail. In the hosted application, Twilio SendGrid can be used to enable production email notification. In a [previous article](https://github.com/GitauHarrison/notes/blob/master/twilio_sendgrid.md), I have explained how this can be done. 
+
+To summarize why Email Notification does not work on the hosted application, Twilio SendGrid expects a domain which I need access to as an administrator. This is not the case on Heroku because I am not the administrator of their domain.
