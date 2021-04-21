@@ -4,8 +4,6 @@ You have a new comment. Follow the link below to take action:
 
 {{ url_for('admin_article_1', _external=True) }}
 
-Ensure you are signed in to see the comment
-
 Sincerely,
 
 The Comment Moderation Team

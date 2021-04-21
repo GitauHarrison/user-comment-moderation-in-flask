@@ -239,13 +239,13 @@ def allow_user_comment_article_2(id):
     article2_send_live_comment_email(user)
     return redirect(url_for('admin_article_2'))
 
-# ---------------------
-# Update articles pages
-# ---------------------
-
 # ========================
 # END OF ADMIN MANAGEMENT
 # ========================
+
+# ====================
+# User Comments below
+# ====================
 
 
 # ---------------
