@@ -119,6 +119,15 @@ def admin():
     return render_template('admin.html', title='Admin')
 
 
+@app.route('/admin/<id>/delete-account', methods=['GET', 'POST'])
+def admin_delete_account(id):
+    admin = Admin.query.get(id)
+    db.session.delete(admin)
+    db.session.commit()
+    flash('Your admin account has been deleted successfully')
+    return redirect(url_for('home'))
+
+
 @app.route('/admin/article_1', methods=['GET', 'POST'])
 @login_required
 def admin_article_1():

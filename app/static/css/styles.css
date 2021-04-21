@@ -1,10 +1,12 @@
-/* General */
+/* Form */
 .my_form{
     border: 1px solid #e6e6e6;
     padding: 20px;
     border-radius: 3px;
     margin: 20px;
 }
+
+/* General */
 body{
     font-family: 'Roboto', sans-serif;
 }
@@ -54,4 +56,18 @@ p{
     background-color: #f2f2f2;
     color:  #706d6c;
     border: 1px solid  #f2f2f2;
+}
+.danger_zone .btn {
+    background-color: #F78181;
+}
+.danger_zone .btn:hover {
+    color: white;
+    background-color: #F78181;
+}
+
+/* Danger Zone */
+.danger_zone {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    padding: 20px;
 }
