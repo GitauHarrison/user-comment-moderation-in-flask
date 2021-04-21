@@ -1,6 +1,6 @@
 # Add Comment Moderation to a Flask Blog
 
-![User Comment Moderation](app/static/images/comment_moderation.gif)
+![User Comment Moderation](app/static/images/complete_comment_moderation2.gif)
 
 If you run a blog, you may desire to have control over what users of your blog post. You want to ensure that the comments featured in any of the blogs posted on your site align with your vision for the blog. Here, I show how this feature can be added to a blog built using Python and the Flask web framework.
 
@@ -111,10 +111,14 @@ Final Result
 
 ## Email Notification
 
+Whenever a user posts a comment, the admin will receive an email notifying him to take action. A link to the actual comment is shared via email. The admin can simply click on the email link to see the posted comment.
+
+![Admin Email Notification](app/static/images/admin_email_notification.png)
+
 Every time a comment is allowed to appear on an article's page by the admin, the user  will receive an email notification informing them that their comment is now live. They can follow the link sent to their email addresses to check the live comment.
 
-![Email Notification](app/static/images/email_notification.png)
+![Live Comment Email Notification](app/static/images/live_comment_notification.png)
 
-This feature is, however, limited to local usage using Flask Mail. In the hosted application, Twilio SendGrid can be used to enable production email notification. In a [previous article](https://github.com/GitauHarrison/notes/blob/master/twilio_sendgrid.md), I have explained how this can be done. 
+This feature is, however, limited to local usage only using Flask Mail. In the hosted application, Twilio SendGrid can be used to enable production email notification. 
 
-To summarize why Email Notification does not work on the hosted application, Twilio SendGrid expects a domain which I need access to as an administrator. This is not the case on Heroku because I am not the administrator of their domain.
+In a [previous article](https://github.com/GitauHarrison/notes/blob/master/twilio_sendgrid.md), I explained how this can be done, but to summarize why Email Notification does not work on the hosted application, Twilio SendGrid expects a domain, which I need access to as an administrator. This is not the case on Heroku because I am not the administrator of their domain.
