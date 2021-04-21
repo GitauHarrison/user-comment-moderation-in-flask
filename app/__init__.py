@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch=True)
 bootstrap = Bootstrap(app)
 mail = Mail(app)
 login = LoginManager(app)
