@@ -16,14 +16,9 @@ def send_mail(subject, sender, recipients, text_body, html_body):
     Thread(target=send_async_email, args=(app, msg)).start()
 
 
-def send_live_comment_email(user):
-    send_mail(
-        '[Your Comment Is Live]',
-        sender=app.config['ADMINS'][0],
-        recipients=[user.email],
-        text_body=render_template('email/live_comment.txt', user=user),
-        html_body=render_template('email/live_comment.html', user=user)
-    )
+# ---------------------
+# Password Reset Email
+# ---------------------
 
 
 def send_password_reset_email(user):
@@ -33,4 +28,61 @@ def send_password_reset_email(user):
         recipients=[user.email],
         text_body=render_template('email/reset_password.txt', user=user),
         html_body=render_template('email/reset_password.html', user=user)
+    )
+
+
+# -----------------------------------
+# Comment Is Live Email Notification
+# -----------------------------------
+
+
+def article1_send_live_comment_email(user):
+    send_mail(
+        '[Your Comment Is Live: Article 1]',
+        sender=app.config['ADMINS'][0],
+        recipients=[user.email],
+        text_body=render_template('email/article1_live_comment.txt',
+                                  user=user),
+        html_body=render_template('email/article1_live_comment.html',
+                                  user=user)
+    )
+
+
+def article2_send_live_comment_email(user):
+    send_mail(
+        '[Your Comment Is Live: Article 2]',
+        sender=app.config['ADMINS'][0],
+        recipients=[user.email],
+        text_body=render_template('email/article2_live_comment.txt',
+                                  user=user),
+        html_body=render_template('email/article2_live_comment.html',
+                                  user=user)
+    )
+
+# ------------------------------------
+# New Comment Email Notification
+# ------------------------------------
+
+
+def article1_send_comment_notification(admin):
+    send_mail(
+        '[New Comment: Article 1]',
+        sender=app.config['ADMINS'][0],
+        recipients=[admin.email],
+        text_body=render_template('email/article1_new_comment.txt',
+                                  admin=admin),
+        html_body=render_template('email/article1_new_comment.html',
+                                  admin=admin)
+    )
+
+
+def article2_send_comment_notification(admin):
+    send_mail(
+        '[New Comment: Article 2]',
+        sender=app.config['ADMINS'][0],
+        recipients=[admin.email],
+        text_body=render_template('email/article2_new_comment.txt',
+                                  admin=admin),
+        html_body=render_template('email/article2_new_comment.html',
+                                  admin=admin)
     )

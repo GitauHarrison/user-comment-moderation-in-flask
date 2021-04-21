@@ -1,0 +1,14 @@
+<p>Dear {{ admin.username }},</p>
+<p>
+    You have a new comment. Follow the link below to take action:
+</p>
+<p>
+    {{ url_for('admin_article_1', _external=True) }}
+</p>
+<p>
+    Ensure you are signed in as an admin.
+</p>
+<P>Sincerely</P>
+<p>
+    The Comment Moderation Team
+</p>

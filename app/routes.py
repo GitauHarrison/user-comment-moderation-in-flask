@@ -6,7 +6,9 @@ from app.forms import LoginForm, RegisterForm, CommentForm,\
     RequestPasswordResetForm, ResetPasswordForm
 from flask_login import login_required
 from werkzeug.urls import url_parse
-from app.email import send_live_comment_email, send_password_reset_email
+from app.email import article1_send_live_comment_email,\
+    send_password_reset_email, article1_send_comment_notification,\
+    article2_send_comment_notification, article2_send_live_comment_email
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -118,6 +120,7 @@ def admin():
 
 
 @app.route('/admin/article_1', methods=['GET', 'POST'])
+@login_required
 def admin_article_1():
     form = CommentForm()
     page = request.args.get('page', 1, type=int)
@@ -145,6 +148,7 @@ def admin_article_1():
 
 
 @app.route('/admin/article_2', methods=['GET', 'POST'])
+@login_required
 def admin_article_2():
     form = CommentForm()
     page = request.args.get('page', 1, type=int)
@@ -210,7 +214,7 @@ def allow_user_comment_article_1(id):
     db.session.commit()
     flash('You have allowed article1 comment from '
           f'{user.username}, id {user.id}')
-    send_live_comment_email(user)
+    article1_send_live_comment_email(user)
     return redirect(url_for('admin_article_1'))
 
 
@@ -223,7 +227,7 @@ def allow_user_comment_article_2(id):
     db.session.commit()
     flash('You have allowed article2 comment from '
           f'{user.username}, id {user.id}')
-    send_live_comment_email(user)
+    article2_send_live_comment_email(user)
     return redirect(url_for('admin_article_2'))
 
 # ---------------------
@@ -250,6 +254,10 @@ def article_1():
         db.session.commit()
         flash('You will receive an email confirmation '
               'when your comment is live')
+        admins = Admin.query.all()
+        print(admins)
+        for admin in admins:
+            article1_send_comment_notification(admin)
         return redirect(url_for('article_1'))
     allowed_user_comments = Comment.query.filter_by(allowed_comment=1).all()
     total_comments_allowed = len(allowed_user_comments)
@@ -276,6 +284,10 @@ def article_2():
         db.session.commit()
         flash('You will receive an email confirmation '
               'when your comment is live')
+        admins = Admin.query.all()
+        print(admins)
+        for admin in admins:
+            article2_send_comment_notification(admin)
         return redirect(url_for('article_2'))
     allowed_user_comments = Article2.query.filter_by(allowed_comment=1).all()
     total_comments_allowed = len(allowed_user_comments)
