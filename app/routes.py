@@ -217,7 +217,6 @@ def delete_user_comment_article_2(id):
 @app.route('/allow-user-comment/article1/user/<id>')
 def allow_user_comment_article_1(id):
     user = Comment.query.get(id)
-    print(user)
     user.allowed_comment = 1
     db.session.add(user)
     db.session.commit()
@@ -230,7 +229,6 @@ def allow_user_comment_article_1(id):
 @app.route('/allow-user-comment/article2/user/<id>')
 def allow_user_comment_article_2(id):
     user = Article2.query.get(id)
-    print(user)
     user.allowed_comment = 1
     db.session.add(user)
     db.session.commit()
@@ -264,7 +262,6 @@ def article_1():
         flash('You will receive an email confirmation '
               'when your comment is live')
         admins = Admin.query.all()
-        print(admins)
         for admin in admins:
             article1_send_comment_notification(admin)
         return redirect(url_for('article_1'))
@@ -294,7 +291,6 @@ def article_2():
         flash('You will receive an email confirmation '
               'when your comment is live')
         admins = Admin.query.all()
-        print(admins)
         for admin in admins:
             article2_send_comment_notification(admin)
         return redirect(url_for('article_2'))
