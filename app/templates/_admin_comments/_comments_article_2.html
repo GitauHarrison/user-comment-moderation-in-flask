@@ -9,7 +9,7 @@
             </span>
             said
             <span class="my_timestamp">
-            {{ moment(user_comment.timestamp).fromNow() }}
+            {{ moment(user_comment.timestamp).format('LLLL') }}
             </span><br>
             <span>
                 {{ user_comment.comment }}
