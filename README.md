@@ -34,6 +34,10 @@ If you run a blog, you may desire to have control over what users of your blog p
 
 * [Comment Moderation App](https://comment-moderation-app.herokuapp.com/) on Heroku
 
+## Contributors
+
+* [Gitau Harrison](https://github.com/GitauHarrison)
+
 ## Testing Locally
 
 1. Clone this repo:
