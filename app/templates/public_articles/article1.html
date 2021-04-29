@@ -38,7 +38,7 @@
                 <h3 id="comments">{{ total_comments_allowed }} Comments</h3>  
 
                 <!-- Comments Go Here -->
-                {% for user_comment in allowed_user_comments %}
+                {% for user_comment in user_comments %}
                     {% include '_allowed_comments.html' %}
                 {% endfor %}                
 

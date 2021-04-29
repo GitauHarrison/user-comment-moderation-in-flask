@@ -265,13 +265,29 @@ def article_1():
         for admin in admins:
             article1_send_comment_notification(admin)
         return redirect(url_for('article_1'))
+    page = request.args.get('page', 1, type=int)
+    user_comments = Comment.query.order_by(
+        Comment.timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False
+        )
+    next_url = url_for('article_1',
+                       _anchor='comments',
+                       page=user_comments.next_num) \
+        if user_comments.has_next else None
+    prev_url = url_for('article_1',
+                       _anchor='comments',
+                       page=user_comments.prev_num) \
+        if user_comments.has_prev else None
     allowed_user_comments = Comment.query.filter_by(allowed_comment=1).all()
     total_comments_allowed = len(allowed_user_comments)
     return render_template('public_articles/article1.html',
                            title='Article 2',
                            form=form,
                            allowed_user_comments=allowed_user_comments,
-                           total_comments_allowed=total_comments_allowed
+                           total_comments_allowed=total_comments_allowed,
+                           next_url=next_url,
+                           prev_url=prev_url,
+                           user_comments=user_comments.items
                            )
 
 
@@ -294,11 +310,27 @@ def article_2():
         for admin in admins:
             article2_send_comment_notification(admin)
         return redirect(url_for('article_2'))
+    page = request.args.get('page', 1, type=int)
+    user_comments = Comment.query.order_by(
+        Comment.timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False
+        )
+    next_url = url_for('article_2',
+                       _anchor='comments',
+                       page=user_comments.next_num) \
+        if user_comments.has_next else None
+    prev_url = url_for('article_2',
+                       _anchor='comments',
+                       page=user_comments.prev_num) \
+        if user_comments.has_prev else None
     allowed_user_comments = Article2.query.filter_by(allowed_comment=1).all()
     total_comments_allowed = len(allowed_user_comments)
     return render_template('public_articles/article2.html',
                            title='Article 2',
                            form=form,
                            allowed_user_comments=allowed_user_comments,
-                           total_comments_allowed=total_comments_allowed
+                           total_comments_allowed=total_comments_allowed,
+                           next_url=next_url,
+                           prev_url=prev_url,
+                           user_comments=user_comments.items
                            )
