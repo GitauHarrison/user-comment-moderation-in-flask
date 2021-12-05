@@ -15,6 +15,7 @@ boostrap = Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db, render_as_batch=True)
 login = LoginManager(app)
+login.login_view = 'login'
 
 if not app.debug:
     if app.config['LOG_TO_STDOUT']:
