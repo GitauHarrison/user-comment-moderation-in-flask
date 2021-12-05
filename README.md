@@ -38,7 +38,7 @@ cd user-comment-moderation-in-flask
 3. Create and activate a virtual environment:
 
 ```python
-$ virtualenv comment_moderation
+$ mkvirtualenv comment_moderation
 ```
 
 4. Install dependencies:
