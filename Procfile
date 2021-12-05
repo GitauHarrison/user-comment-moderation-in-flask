@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn moderation:app
+web: flask db upgrade; gunicorn test:app
