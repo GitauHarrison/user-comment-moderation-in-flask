@@ -27,3 +27,12 @@ class Config(object):
 
     # Heroku logs
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+
+    # Auth0
+    AUTHO_DOMAIN = os.environ.get('AUTHO_DOMAIN')
+    AUTHO_CLIENT_ID = os.environ.get('AUTHO_CLIENT_ID')
+    AUTHO_CLIENT_SECRET = os.environ.get('AUTHO_CLIENT_SECRET')
+    AUTH0_CALLBACK_URL = os.environ.get('AUTH0_CALLBACK_URL')
+
+    # Localhost testing
+    START_NGROK = os.environ.get('START_NGROK')

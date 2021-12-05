@@ -1,5 +1,9 @@
-from app import app, db
-from flask import render_template, redirect, url_for, flash, request
+from app import app, db, auth0
+from flask import render_template, redirect, url_for, flash, request,\
+    session, jsonify
+import json
+from functools import wraps
+from six.moves.urllib.parse import urlencode
 from flask_login import current_user, login_user, logout_user
 from app.models import Admin, Comment, Article2
 from app.forms import LoginForm, RegisterForm, CommentForm,\
@@ -25,12 +29,20 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('admin')
-        return redirect(next_page)
+        return auth0.authorize_redirect(redirect_uri=app.config['AUTH0_CALLBACK_URL'])
     return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/logout')
 def logout():
+    # # clear session stored data
+    # session.clear()
+    # # Redirect user to logout endpoint
+    # params = {
+    #     'returnTo': url_for('home', _external=True),
+    #     'client_id': app.config['AUTHO_CLIENT_ID']
+    # }
+    # return redirect(auth0.api_base_url + 'v2/logout?' + urlencode(params))
     logout_user()
     return redirect(url_for('home'))
 
@@ -106,6 +118,46 @@ def reset_password(token):
     return render_template('reset_password.html',
                            title='Reset Password',
                            form=form)
+
+# auth0
+
+
+@app.route('/callback')
+def callback_handling():
+    # Handle response from token
+    auth0.authorize_access_token()
+    resp = auth0.get('userinfo')
+    userinfo = resp.json()
+
+    # Store the user information in flask session
+    session['jwt_payload'] = userinfo
+    session['profile'] = {
+        'user_id': userinfo['sub'],
+        'name': userinfo['name'],
+        'picture': userinfo['picture']
+    }
+    return redirect('/dashboard')
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'profile' not in session:
+            # Redirect to login page
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route('/dashboard')
+@requires_auth
+def dashboard():
+    return render_template('dashboard.html',
+                           title='Dashboard',
+                           userinfo=session['profile'],
+                           userinfo_pretty=json.dumps(session['jwt_payload'],
+                                                      indent=4)
+                           )
 
 
 # ======================

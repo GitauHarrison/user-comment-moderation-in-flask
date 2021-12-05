@@ -10,6 +10,7 @@ from flask_moment import Moment
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
+from authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -22,6 +23,30 @@ login = LoginManager(app)
 login.login_view = 'login'
 bcrypt = Bcrypt(app)
 moment = Moment(app)
+oauth = OAuth(app)
+
+auth0 = oauth.register(
+    'auth0',
+    client_id=app.config['AUTHO_CLIENT_ID'],
+    client_secret=app.config['AUTHO_CLIENT_SECRET'],
+    api_base_url='http://127.0.0.1:5000/',
+    access_token_url='http://127.0.0.1:5000/oauth/token',
+    authorize_url='http://127.0.0.1:5000/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    },
+)
+
+
+def start_ngrok():
+    from pyngrok import ngrok
+
+    url = ngrok.connect(5000)
+    print('* Tunnel: ', url)
+
+
+# if app.config['START_NGROK']:
+#     start_ngrok()()
 
 if not app.debug:
     if app.config['MAIL_SERVER']:

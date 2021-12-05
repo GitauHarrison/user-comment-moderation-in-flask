@@ -3,115 +3,13 @@
 
 {% block app_content %}
         <div class="row">            
-            <div class="col-md-2">
-                <!-- Empty div -->
-            </div>
-            <div class="col-md-8">
-                <h1 id="usage-locally">Instructions on How to Use This App Locally</h1>
-                <p>Posting Comments</p>
-                <ul>
-                    <li><p>Click on the &quot;Articles&quot; dropdown link and select one article</p>
-                    </li>
-                    <li>
-                        <p>
-                            Post several comments on the 
-                            <a href="https://comment-moderation-app.herokuapp.com/article_1">selected article (say article 1)</a> 
-                            page using dummy credentials
-                        </p>
-                    </li>
-                </ul>
-                <p>Log in as Admin</p>
-                <ul>
-                    <li>
-                        <p>
-                            Click on the <a href="https://comment-moderation-app.herokuapp.com/login?next=%2Fadmin">Admin</a> 
-                            link in the top-right navbar to access all user comments posted on the blog
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            You will need to <a href="https://comment-moderation-app.herokuapp.com/register">register</a> first, 
-                            so create a dummy admin account
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            <a href="https://comment-moderation-app.herokuapp.com/login?next=%2Fadmin">Log</a> into the new admin account. 
-                            You should be able to see all user comments
-                        </p>
-                    </li>
-                </ul>
-                <p>Allow/Delete Posts</p>
-                <ul>
-                    <li>
-                        <p>
-                            Choose an article among the cards in the <a href="https://comment-moderation-app.herokuapp.com/admin">Admin</a> page by clicking "Take Action" button
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Click <em>Delete</em> link to delete a user&#39;s comment
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Click <em>Allow</em> to allow a user&#39;s comment to appear in the 
-                            <em>selected article</em> page
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Navigate to the <a href="https://comment-moderation-app.herokuapp.com/article_1">selected article 
-                            (say article 1)</a> page to see all &quot;Allowed&quot; comments
-                        </p>
-                    </li>
-                </ul>
-                <p>Another try</p>
-                <ul>
-                    <li>
-                        <p>
-                            Select <a href="https://comment-moderation-app.herokuapp.com/article_2">another article (say article 2)</a>
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Post several comments on the <a href="https://comment-moderation-app.herokuapp.com/article_2">selected article</a> 
-                            page using dummy credentials
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Click on the <a href="https://comment-moderation-app.herokuapp.com/admin">Admin</a>  
-                            link to access all user comments posted on the blog
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Click <em>Delete</em> link to delete a user&#39;s comment
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Click <em>Allow</em> to allow a user&#39;s comment to appear in the 
-                            <em>selected article</em> page
-                        </p>
-                    </li>
-                    <li>
-                        <p>
-                            Navigate to the <a href="https://comment-moderation-app.herokuapp.com/article_2">selected article (article 2)</a> 
-                            page to see all &quot;Allowed&quot; comments
-                        </p>
-                    </li>
-                </ul>
-                <p>Final Result</p>
-                <ul>
-                    <li>You can <a href="https://comment-moderation-app.herokuapp.com/logout">log out</a> as an admin and your 
-                        allowed comments should persist in the selected articles&#39; pages
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-2">
-                <!-- Empty div -->
-            </div>
+            <div class="col-md-12">
+                <div class="login-box auth0-box before">
+                    <img src="https://i.cloudup.com/StzWWrY34s.png" />
+                    <h3>Auth0 Example</h3>
+                    <p>Zero friction identity infrastructure, built for developers</p>
+                    <a class="btn btn-primary btn-lg btn-login btn-block" href="{{ url_for('login') }}">Log In</a>
+                </div>
+            </div>            
         </div>          
 {% endblock %}
