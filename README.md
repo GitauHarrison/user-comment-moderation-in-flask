@@ -2,10 +2,13 @@
 
 One of the challenges that administrators if an application have is the control of the comments that users post. Being able moderate users comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
 
+![Comment Moderation in Flask](app/static/img/comment_moderation.gif)
+
 ## Features
 
 - Comment Moderation
 - User Management
+- Database Management
 
 ## Tools Used
 
@@ -16,6 +19,7 @@ One of the challenges that administrators if an application have is the control 
 - Flask-Login (User Authentication)
 - Flask-Migrate (Database Migration)
 - Email Validator (Email Validation)
+- Python for programming
 
 ## Testing
 
