@@ -1,6 +1,6 @@
 # Comment Moderation in a Flask Application
 
-One of the challenges that administrators if an application have is the control of the comments that users post. Being able to moderate users' comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
+One of the challenges that administrators of an application have is the control of the comments that users post. Being able to moderate users' comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
 
 ![Comment Moderation in Flask](app/static/img/comment_moderation.gif)
 
@@ -21,7 +21,20 @@ One of the challenges that administrators if an application have is the control 
 - Email Validator (Email Validation)
 - Python for programming
 
-## Testing
+## Deployment
+
+- [Heroku](https://comment-moderation-app.herokuapp.com/)
+
+## Testing Deployed Application
+
+1. Post a comment in the [home page](https://comment-moderation-app.herokuapp.com/)
+2. [Register for an admin account](https://comment-moderation-app.herokuapp.com/register) if you are new
+3. [Login to your admin account](https://comment-moderation-app.herokuapp.com/login) to see all comments
+4. [View all comments](https://comment-moderation-app.herokuapp.com/admin/dashboard) in the admin dashboard
+5. You can _allow_ or _delete_ the posted comments.
+6. Navigate back to the home page to see all "allowed" comments.
+
+## Testing The Application Locally
 
 1. Clone this repo:
 
