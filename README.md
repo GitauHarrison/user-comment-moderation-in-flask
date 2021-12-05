@@ -1,51 +1,56 @@
-# How To Start a Flask Server
+# Comment Moderation in a Flask Application
 
-The Flask microframework is a small, simple, and powerful web framework for Python. It is designed to be used as a base for web development, but it can be used as a standalone application.
+One of the challenges that administrators if an application have is the control of the comments that users post. Being able moderate users comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
 
 ## Features
 
-- Responsive design
+- Comment Moderation
+- User Management
 
 ## Tools Used
 
 - Flask framework
 - Flask Bootstrap (CSS framework)
-- Python for programming
+- Flask-WTF (Forms)
+- Flask-SQLAlchemy (Database)
+- Flask-Login (User Authentication)
+- Flask-Migrate (Database Migration)
+- Email Validator (Email Validation)
 
 ## Testing
 
 1. Clone this repo:
 
 ```python
-git clone git@github.com:GitauHarrison/starting-a-flask-server.git`
+git clone git@github.com:GitauHarrison/user-comment-moderation-in-flask.git`
 ```
 
 2. Change directory to the new repo:
 
 ```python
-cd starting-a-flask-server
+cd user-comment-moderation-in-flask
 ```
 
 3. Create and activate a virtual environment:
 
 ```python
-$ virtualenv starting-a-flask-server
+$ virtualenv comment_moderation
 ```
 
 4. Install dependencies:
 
 ```python
-(starting-a-flask-server)$ pip install -r requirements.txt
+(comment_moderation)$ pip install -r requirements.txt
 ```
 
 5. Run the server:
 
 ```python
-(starting-a-flask-server)$ flask run
+(comment_moderation)$ flask run
 ```
 
 ## Learn 
 
-Working with Flask is fairly simple. Learn more about Flask below:
+Flask is very unopinionated. You can pretty much build whatever feature you want. If you would like to know how I was able to integrate comment moderation into this application, check out the  tutorial below:
 
-- [Start a Flask Server](https://github.com/GitauHarrison/notes/blob/master/start_flask_server.md)
+- [Comment Moderation in Flask](https://github.com/GitauHarrison/notes/blob/master/comment_moderation.md)
