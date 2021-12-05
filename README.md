@@ -1,6 +1,6 @@
 # Comment Moderation in a Flask Application
 
-One of the challenges that administrators if an application have is the control of the comments that users post. Being able moderate users comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
+One of the challenges that administrators if an application have is the control of the comments that users post. Being able to moderate users' comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
 
 ![Comment Moderation in Flask](app/static/img/comment_moderation.gif)
 
@@ -44,7 +44,7 @@ $ mkvirtualenv comment_moderation
 4. Install dependencies:
 
 ```python
-(comment_moderation)$ pip install -r requirements.txt
+(comment_moderation)$ pip3 install -r requirements.txt
 ```
 
 5. Run the server:
