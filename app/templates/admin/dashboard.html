@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block app_context %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Review All User Comments</h1>
+        </div>  
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {% for user in users %}
+                <table class="table table-striped">
+                    <tr valign="top">
+                        <td><img src="{{ user.avatar(36) }}"></td>
+                        <td>{{ user.username }} says:<br>{{ user.content }}</td>
+                    </tr>
+                </table>
+
+                <span>
+                    {% if user.allowed_comment == 1 %}
+                        <a href=" # ">Allowed</a> 
+                    {% else %}
+                        <a href=" {{ url_for('admin_allow', id=user.id) }} ">Allow</a> 
+                    {% endif %}
+                    | 
+                    <a href=" {{ url_for('admin_delete', id=user.id) }} ">Delete</a>
+                </span>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

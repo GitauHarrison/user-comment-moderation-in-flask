@@ -1,128 +1,60 @@
-# Add Comment Moderation to a Flask Blog
+# Comment Moderation in a Flask Application
 
-![User Comment Moderation](app/static/images/complete_comment_moderation2.gif)
+One of the challenges that administrators if an application have is the control of the comments that users post. Being able moderate users comments is a very important feature of a website. This application shows how you can create a custom comment moderation feature in a Flask application.
 
-If you run a blog, you may desire to have control over what users of your blog post. You want to ensure that the comments featured in any of the blogs posted on your site align with your vision for the blog. Here, I show how this feature can be added to a blog built using Python and the Flask web framework.
+![Comment Moderation in Flask](app/static/img/comment_moderation.gif)
 
 ## Features
 
-* User registration
-* Handling of user login sessions
-* Email Notification
-* Database management
-* Password reset
+- Comment Moderation
+- User Management
+- Database Management
 
 ## Tools Used
 
-* Flask framework
-* Python and JavaScript for programming
-* Flask SQLAlchemy for creation of database
-* Flask migrate to handle database migrations
-* Flask bootstrap for styling and mobile responsiveness
-* Flask mail to handle email notification
-* Flask wtf for form creation
-* Flask bcrypt for extra password hashing
-* Email validator to ensure user emails are valid
-* Python dotenv to load hidden environment variables
-* Pyjwt for token generation
+- Flask framework
+- Flask Bootstrap (CSS framework)
+- Flask-WTF (Forms)
+- Flask-SQLAlchemy (Database)
+- Flask-Login (User Authentication)
+- Flask-Migrate (Database Migration)
+- Email Validator (Email Validation)
+- Python for programming
 
-## Project Design
-
-* [Comment Moderation App Design](https://www.figma.com/proto/M6vfs6SOptVVh1WgmGgQxa/Comment-Moderation-Demo?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1) using Figma
-
-## Deployed App
-
-* [Comment Moderation App](https://comment-moderation-app.herokuapp.com/) on Heroku
-
-## Contributors
-
-* [Gitau Harrison](https://github.com/GitauHarrison)
-
-## Testing Locally
+## Testing
 
 1. Clone this repo:
 
 ```python
-$ git clone git@github.com:GitauHarrison/user-comment-moderation-in-flask.git
+git clone git@github.com:GitauHarrison/user-comment-moderation-in-flask.git`
 ```
 
-2. Move into the cloned directory:
+2. Change directory to the new repo:
 
 ```python
-$ cd user-comment-moderation-in-flask
+cd user-comment-moderation-in-flask
 ```
 
-3. Create and activate your virtual environment:
+3. Create and activate a virtual environment:
 
 ```python
-$ mkvirtualenv comment_moderation # I am using virtualenvwrapper
+$ mkvirtualenv comment_moderation
 ```
 
-4. Install project dependencies within your active virtual environment:
+4. Install dependencies:
 
 ```python
-(comment_moderation)$ pip3 install -r requirements.txt
+(comment_moderation)$ pip install -r requirements.txt
 ```
 
-5. Start the flask server:
+5. Run the server:
 
 ```python
 (comment_moderation)$ flask run
 ```
 
-## Usage Locally
+## Learn 
 
-Posting Comments
-* Click on the "Articles" dropdown link and select one article
+Flask is very unopinionated. You can pretty much build whatever feature you want. If you would like to know how I was able to integrate comment moderation into this application, check out the  tutorial below:
 
-* Post several comments on the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page using dummy credentials
-
-Log in as Admin
-
-* Click on the [Admin](http://127.0.0.1:5000/login?next=%2Fadmin) link in the top-right navbar to access all user comments posted on the blog
-
-* You will need to [register](http://127.0.0.1:5000/register) first, so create a dummy admin account
-
-* [Log](http://127.0.0.1:5000/login?next=%2Fadmin) into the new admin account. You should be able to see all user comments
-
-Allow/Delete Posts
-
-* Choose an article among the cards in the [Admin](http://127.0.0.1:5000/admin) page by clicking "Take Action" button
-
-* Click _Delete_ link to delete a user's comment
-
-* Click _Allow_ to allow a user's comment to appear in the _selected article_ page
-
-* Navigate to the [selected article (say article 1)](http://127.0.0.1:5000/article_1) page to see all "Allowed" comments
-
-Another try
-
-* Select [another article (say article 2)](http://127.0.0.1:5000/article_2)
-
-* Post several comments on the [selected article](http://127.0.0.1:5000/article_2) page using dummy credentials
-
-* Click on the [Admin](http://127.0.0.1:5000/admin) link to access all user comments posted on the blog
-
-* Click _Delete_ link to delete a user's comment
-
-* Click _Allow_ to allow a user's comment to appear in the _article 2_ page
-
-* Navigate to the [selected article (article 2)](http://127.0.0.1:5000/article_2) page to see all "Allowed" comments
-
-Final Result
-
-* You can [log out](http://127.0.0.1:5000/logout) as an admin and your allowed comments should persist in the selected articles' pages
-
-## Email Notification
-
-Whenever a user posts a comment, the admin will receive an email notifying him to take action. A link to the actual comment is shared via email. The admin can simply click on the email link to see the posted comment.
-
-![Admin Email Notification](app/static/images/admin_email_notification.png)
-
-Every time a comment is allowed to appear on an article's page by the admin, the user  will receive an email notification informing them that their comment is now live. They can follow the link sent to their email addresses to check the live comment.
-
-![Live Comment Email Notification](app/static/images/live_comment_notification.png)
-
-This feature is, however, limited to local usage only using Flask Mail. In the hosted application, Twilio SendGrid can be used to enable production email notification. 
-
-In a [previous article](https://github.com/GitauHarrison/notes/blob/master/twilio_sendgrid.md), I explained how this can be done, but to summarize why Email Notification does not work on the hosted application, Twilio SendGrid expects a domain, which I need access to as an administrator. This is not the case on Heroku because I am not the administrator of their domain.
+- [Comment Moderation in Flask](https://github.com/GitauHarrison/notes/blob/master/comment_moderation.md)

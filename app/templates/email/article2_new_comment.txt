@@ -1,9 +1,0 @@
-Dear {{ admin.username }},
-
-You have a new comment. Follow the link below to take action:
-
-{{ url_for('admin_article_2', _external=True) }}
-
-Sincerely,
-
-The Comment Moderation Team

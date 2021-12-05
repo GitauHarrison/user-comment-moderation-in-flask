@@ -1,9 +1,0 @@
-Dear {{ user.username }},
-
-Your comment is now live on the blog. You can check it out by visiting 
-{{ url_for('article_2', _external=True) }}.
-
-Sincerely,
-
-Comment Modearation Team
-

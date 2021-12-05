@@ -1,139 +1,67 @@
 {% extends 'bootstrap/base.html' %}
 
-<!-- Head image goes here -->
+<!-- Link all style files here -->
 {% block head %}
-    {{ super() }}
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename = 'images/admin.png') }}">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    {{  super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 {% endblock %}
 
+<!-- The title of our application is defined here -->
 {% block title %}
     {% if title %}
-       {{ title }} - Moderation
+        {{ title }} - Moderation
     {% else %}
-        Comment Moderation Demo
+        Comment Moderation in Flask
     {% endif %}
 {% endblock %}
 
-{% block styles %}
-    {{ super() }}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-{% endblock %}
-
+<!-- This is the navbar -->
 {% block navbar %}
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ url_for('home') }}">Comment Moderation Demo</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Articles <img class="img-fluid" style="max-width: 100%; height: auto;" src="{{ url_for('static', filename='images/dropdown2.png') }}">
-                        </a>
-                        <div class="dropdown-menu article_link_style" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{{ url_for('article_1') }}">Article 1</a><br>
-                          <a class="dropdown-item" href="{{ url_for('article_2') }}">Article 2</a><br>                          
-                        </div>
-                      </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    {% if current_user.is_anonymous %}
-                        <li><a href="{{ url_for('admin') }}">Admin</a></li>
-                    {% else %}
-                        <li><a href="{{ url_for('admin') }}">Admin</a></li>
-                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    {% endif %}
-                </ul>                           
-            </div>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href=" {{ url_for('index') }} ">Flask Comments</a>
         </div>
-    </nav>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">            
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                    <li><a href=" {{ url_for('admin_dashboard') }} ">Admin</a></li>
+                    <li><a href=" {{ url_for('logout') }} ">Logout</a></li>
+                {% else %}
+                    <li><a href=" {{ url_for('login') }} ">Login</a></li>
+                {% endif %}
+            </ul>                       
+        </div>
+    </div>
+</nav>
 {% endblock %}
 
+<!-- Contents of all our pages will go here -->
 {% block content %}
     <div class="container">
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                   <div class="alert alert-info" role='alert'>
-                       {{ message }}
-                   </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
-
-        {% block app_content %}{% endblock %}
+        
+        {% block app_context %}{% endblock %}
     </div>
 {% endblock %}
 
+<!-- All scripts will go here -->
 {% block scripts %}
-    {{ super() }}
-    {{ moment.include_moment() }}
-    <script src="https://cdn.auth0.com/js/lock/11.29/lock.min.js"></script>
-    <script>
-        // Decode utf8 characters properly
-        var config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
-        config.extraParams = config.extraParams || {};
-        var connection = config.connection;
-        var prompt = config.prompt;
-        var languageDictionary;
-        var language;
-
-        if (config.dict && config.dict.signin && config.dict.signin.title) {
-        languageDictionary = { title: config.dict.signin.title };
-        } else if (typeof config.dict === 'string') {
-        language = config.dict;
-        }
-        var loginHint = config.extraParams.login_hint;
-        var colors = config.colors || {};
-
-        // Available Lock configuration options: https://auth0.com/docs/libraries/lock/v11/configuration
-        var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
-        auth: {
-            redirectUrl: config.callbackURL,
-            responseType: (config.internalOptions || {}).response_type ||
-            (config.callbackOnLocationHash ? 'token' : 'code'),
-            params: config.internalOptions
-        },
-        configurationBaseUrl: config.clientConfigurationBaseUrl,
-        overrides: {
-            __tenant: config.auth0Tenant,
-            __token_issuer: config.authorizationServer.issuer
-        },
-        assetsUrl:  config.assetsUrl,
-        allowedConnections: connection ? [connection] : null,
-        rememberLastLogin: !prompt,
-        language: language,
-        languageDictionary: languageDictionary,
-        theme: {
-            //logo:            'YOUR LOGO HERE',
-            primaryColor:    colors.primary ? colors.primary : 'green'
-        },
-        prefill: loginHint ? { email: loginHint, username: loginHint } : null,
-        closable: false,
-        defaultADUsernameFromEmailPrefix: false
-        });
-
-        if(colors.page_background) {
-        var css = '.auth0-lock.auth0-lock .auth0-lock-overlay { background: ' +
-                    colors.page_background +
-                    ' }';
-        var style = document.createElement('style');
-
-        style.appendChild(document.createTextNode(css));
-
-        document.body.appendChild(style);
-        }
-
-        lock.show();
-    </script>
+    {{  super() }}
+    
 {% endblock %}

@@ -1,388 +1,91 @@
-from app import app, db, auth0
-from flask import render_template, redirect, url_for, flash, request,\
-    session, jsonify
-import json
-from functools import wraps
-from six.moves.urllib.parse import urlencode
-from flask_login import current_user, login_user, logout_user
-from app.models import Admin, Comment, Article2
-from app.forms import LoginForm, RegisterForm, CommentForm,\
-    RequestPasswordResetForm, ResetPasswordForm
-from flask_login import login_required
-from werkzeug.urls import url_parse
-from app.email import article1_send_live_comment_email,\
-    send_password_reset_email, article1_send_comment_notification,\
-    article2_send_comment_notification, article2_send_live_comment_email
+from flask.helpers import url_for
+from werkzeug.utils import redirect
+from app import app, db
+from flask import render_template, flash, redirect, url_for, request
+from app.forms import CommentForm, AdminRegistrationForm, AdminLoginForm
+from app.models import UserComment, Admin
+from flask_login import current_user, login_user, logout_user, login_required
+
+
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    users = UserComment.query.filter_by(allowed_comment=True).all()
+    form = CommentForm()
+    if form.validate_on_submit():
+        user = UserComment(
+            username=form.username.data,
+            email=form.email.data,
+            content=form.comment.data
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash('Your comment has been posted!')
+        return redirect(url_for('index'))
+    return render_template(
+                           'index.html',
+                           form=form,
+                           users=users
+                           )
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = AdminRegistrationForm()
+    if form.validate_on_submit():
+        user = Admin(
+            username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user! Login to contunue.')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('admin'))
-    form = LoginForm()
+        return redirect(url_for('index'))
+    form = AdminLoginForm()
     if form.validate_on_submit():
         user = Admin.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('admin')
-        return auth0.authorize_redirect(redirect_uri=app.config['AUTH0_CALLBACK_URL'])
+        return redirect(url_for('index'))
     return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/logout')
 def logout():
-    # # clear session stored data
-    # session.clear()
-    # # Redirect user to logout endpoint
-    # params = {
-    #     'returnTo': url_for('home', _external=True),
-    #     'client_id': app.config['AUTHO_CLIENT_ID']
-    # }
-    # return redirect(auth0.api_base_url + 'v2/logout?' + urlencode(params))
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('login'))
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = RegisterForm()
-    if form.validate_on_submit():
-        user = Admin(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered admin!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
-
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
-def home():
-    form = CommentForm()
-    if form.validate_on_submit():
-        user = Comment(username=form.username.data,
-                       email=form.email.data,
-                       comment=form.comment.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('You will receive an email confirmation '
-              'when your comment is live')
-        return redirect(url_for('home'))
-    allowed_user_comments = Comment.query.filter_by(allowed_comment=1).all()
-    total_comments_allowed = len(allowed_user_comments)
-    return render_template('home.html',
-                           title='Home',
-                           form=form,
-                           allowed_user_comments=allowed_user_comments,
-                           total_comments_allowed=total_comments_allowed
-                           )
-
-
-@app.route('/request-password-reset', methods=['GET', 'POST'])
-def request_password_reset():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RequestPasswordResetForm()
-    if form.validate_on_submit():
-        admin = Admin.query.filter_by(email=form.email.data).first()
-        if admin:
-            send_password_reset_email(admin)
-        flash('Check your email for instructions to reset your password')
-        return redirect(url_for('login'))
-    return render_template('request_password_reset.html',
-                           title='Request Password Reset',
-                           form=form
-                           )
-
-
-@app.route('/reset-password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    admin = Admin.verify_reset_password_token(token)
-    if not admin:
-        return redirect(url_for('home'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        admin.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been reset')
-        return redirect(url_for('login'))
-    return render_template('reset_password.html',
-                           title='Reset Password',
-                           form=form)
-
-# auth0
-
-
-@app.route('/callback')
-def callback_handling():
-    # Handle response from token
-    auth0.authorize_access_token()
-    resp = auth0.get('userinfo')
-    userinfo = resp.json()
-
-    # Store the user information in flask session
-    session['jwt_payload'] = userinfo
-    session['profile'] = {
-        'user_id': userinfo['sub'],
-        'name': userinfo['name'],
-        'picture': userinfo['picture']
-    }
-    return redirect('/dashboard')
-
-
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'profile' not in session:
-            # Redirect to login page
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated
-
-
-@app.route('/dashboard')
-@requires_auth
-def dashboard():
-    return render_template('dashboard.html',
-                           title='Dashboard',
-                           userinfo=session['profile'],
-                           userinfo_pretty=json.dumps(session['jwt_payload'],
-                                                      indent=4)
-                           )
-
-
-# ======================
-# ADMIN MANAGEMENT HOME
-# ======================
-
-
-@app.route('/admin')
+@app.route('/admin/dashboard')
 @login_required
-def admin():
-    return render_template('admin.html', title='Admin')
+def admin_dashboard():
+    users = UserComment.query.all()
+    return render_template('admin/dashboard.html', users=users)
 
 
-@app.route('/admin/<id>/delete-account', methods=['GET', 'POST'])
-def admin_delete_account(id):
-    admin = Admin.query.get(id)
-    db.session.delete(admin)
-    db.session.commit()
-    flash('Your admin account has been deleted successfully')
-    return redirect(url_for('home'))
-
-
-@app.route('/admin/article_1', methods=['GET', 'POST'])
+@app.route('/admin/delete/<int:id>')
 @login_required
-def admin_article_1():
-    form = CommentForm()
-    page = request.args.get('page', 1, type=int)
-    user_comments = Comment.query.order_by(
-        Comment.timestamp.desc()).paginate(
-            page, app.config['POSTS_PER_PAGE'], False
-        )
-    next_url = url_for('admin_article_1',
-                       _anchor='comments',
-                       page=user_comments.next_num) \
-        if user_comments.has_next else None
-    prev_url = url_for('admin_article_1',
-                       _anchor='comments',
-                       page=user_comments.prev_num) \
-        if user_comments.has_prev else None
-    all_user_comments = len(Comment.query.all())
-    return render_template('admin_review_articles/admin_article1.html',
-                           title='Article 1',
-                           user_comments=user_comments.items,
-                           next_url=next_url,
-                           prev_url=prev_url,
-                           all_user_comments=all_user_comments,
-                           form=form
-                           )
-
-
-@app.route('/admin/article_2', methods=['GET', 'POST'])
-@login_required
-def admin_article_2():
-    form = CommentForm()
-    page = request.args.get('page', 1, type=int)
-    user_comments = Article2.query.order_by(
-        Article2.timestamp.desc()).paginate(
-            page, app.config['POSTS_PER_PAGE'], False
-        )
-    next_url = url_for('admin_article_2',
-                       _anchor='comments',
-                       page=user_comments.next_num) \
-        if user_comments.has_next else None
-    prev_url = url_for('admin_article_2',
-                       _anchor='comments',
-                       page=user_comments.prev_num) \
-        if user_comments.has_prev else None
-    all_user_comments = len(Article2.query.all())
-    return render_template('admin_review_articles/admin_article2.html',
-                           title='Article 2',
-                           user_comments=user_comments.items,
-                           next_url=next_url,
-                           prev_url=prev_url,
-                           all_user_comments=all_user_comments,
-                           form=form
-                           )
-
-
-# ---------------------
-# Delete comments
-# ---------------------
-
-
-@app.route('/delete-user-comment/article1/user/<id>')
-def delete_user_comment_article_1(id):
-    user = Comment.query.get(id)
+def admin_delete(id):
+    user = UserComment.query.get_or_404(id)
     db.session.delete(user)
     db.session.commit()
-    flash('You have deleted article1 comment made by '
-          f'{user.username}, id {user.id}')
-    return redirect(url_for('admin_article_1'))
+    flash(f'Comment {id} deleted!')
+    return redirect(url_for('admin_dashboard'))
 
 
-@app.route('/delete-user-comment/article2/user/<id>')
-def delete_user_comment_article_2(id):
-    user = Article2.query.get(id)
-    db.session.delete(user)
+@app.route('/admin/allow/<int:id>')
+@login_required
+def admin_allow(id):
+    user = UserComment.query.get_or_404(id)
+    user.allowed_comment = True
     db.session.commit()
-    flash('You have deleted article2 comment made by '
-          f'{user.username}, id {user.id}')
-    return redirect(url_for('admin_article_2'))
-
-
-# ---------------------
-# Allow comments
-# ---------------------
-
-
-@app.route('/allow-user-comment/article1/user/<id>')
-def allow_user_comment_article_1(id):
-    user = Comment.query.get(id)
-    user.allowed_comment = 1
-    db.session.add(user)
-    db.session.commit()
-    flash('You have allowed article1 comment from '
-          f'{user.username}, id {user.id}')
-    article1_send_live_comment_email(user)
-    return redirect(url_for('admin_article_1'))
-
-
-@app.route('/allow-user-comment/article2/user/<id>')
-def allow_user_comment_article_2(id):
-    user = Article2.query.get(id)
-    user.allowed_comment = 1
-    db.session.add(user)
-    db.session.commit()
-    flash('You have allowed article2 comment from '
-          f'{user.username}, id {user.id}')
-    article2_send_live_comment_email(user)
-    return redirect(url_for('admin_article_2'))
-
-# ========================
-# END OF ADMIN MANAGEMENT
-# ========================
-
-# ====================
-# User Comments below
-# ====================
-
-
-# ---------------
-# Article 1
-# ---------------
-
-@app.route('/article_1', methods=['GET', 'POST'])
-def article_1():
-    form = CommentForm()
-    if form.validate_on_submit():
-        user = Comment(username=form.username.data,
-                       email=form.email.data,
-                       comment=form.comment.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('You will receive an email confirmation '
-              'when your comment is live')
-        admins = Admin.query.all()
-        for admin in admins:
-            article1_send_comment_notification(admin)
-        return redirect(url_for('article_1'))
-    page = request.args.get('page', 1, type=int)
-    user_comments = Comment.query.order_by(
-        Comment.timestamp.desc()).paginate(
-            page, app.config['POSTS_PER_PAGE'], False
-        )
-    next_url = url_for('article_1',
-                       _anchor='comments',
-                       page=user_comments.next_num) \
-        if user_comments.has_next else None
-    prev_url = url_for('article_1',
-                       _anchor='comments',
-                       page=user_comments.prev_num) \
-        if user_comments.has_prev else None
-    allowed_user_comments = Comment.query.filter_by(allowed_comment=1).all()
-    total_comments_allowed = len(allowed_user_comments)
-    return render_template('public_articles/article1.html',
-                           title='Article 2',
-                           form=form,
-                           allowed_user_comments=allowed_user_comments,
-                           total_comments_allowed=total_comments_allowed,
-                           next_url=next_url,
-                           prev_url=prev_url,
-                           user_comments=user_comments.items
-                           )
-
-
-# ---------------
-# Article 2
-# ---------------
-
-@app.route('/article_2', methods=['GET', 'POST'])
-def article_2():
-    form = CommentForm()
-    if form.validate_on_submit():
-        user = Article2(username=form.username.data,
-                        email=form.email.data,
-                        comment=form.comment.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('You will receive an email confirmation '
-              'when your comment is live')
-        admins = Admin.query.all()
-        for admin in admins:
-            article2_send_comment_notification(admin)
-        return redirect(url_for('article_2'))
-    page = request.args.get('page', 1, type=int)
-    user_comments = Comment.query.order_by(
-        Comment.timestamp.desc()).paginate(
-            page, app.config['POSTS_PER_PAGE'], False
-        )
-    next_url = url_for('article_2',
-                       _anchor='comments',
-                       page=user_comments.next_num) \
-        if user_comments.has_next else None
-    prev_url = url_for('article_2',
-                       _anchor='comments',
-                       page=user_comments.prev_num) \
-        if user_comments.has_prev else None
-    allowed_user_comments = Article2.query.filter_by(allowed_comment=1).all()
-    total_comments_allowed = len(allowed_user_comments)
-    return render_template('public_articles/article2.html',
-                           title='Article 2',
-                           form=form,
-                           allowed_user_comments=allowed_user_comments,
-                           total_comments_allowed=total_comments_allowed,
-                           next_url=next_url,
-                           prev_url=prev_url,
-                           user_comments=user_comments.items
-                           )
+    flash(f'Comment {id} allowed!')
+    return redirect(url_for('admin_dashboard'))

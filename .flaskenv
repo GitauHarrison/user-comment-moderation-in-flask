@@ -1,4 +1,3 @@
-FLASK_APP=moderation.py
+FLASK_APP=test.py
 FLASK_ENV=development
-FLASK_DEBUG=True
-START_NGROK=1
+FLASK_DEBUG=1
