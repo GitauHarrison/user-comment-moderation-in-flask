@@ -20,7 +20,7 @@ def index():
         )
         db.session.add(user)
         db.session.commit()
-        flash('Your comment has been posted!')
+        flash('Your comment has been posted! The admin will review it shortly.')
         return redirect(url_for('index'))
     return render_template(
                            'index.html',
@@ -54,7 +54,7 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        return redirect(url_for('admin_dashboard'))
     return render_template('login.html', title='Sign In', form=form)
 
 
