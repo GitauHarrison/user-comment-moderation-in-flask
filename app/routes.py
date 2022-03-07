@@ -1,7 +1,5 @@
-from flask.helpers import url_for
-from werkzeug.utils import redirect
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for
 from app.forms import CommentForm, AdminRegistrationForm, AdminLoginForm
 from app.models import UserComment, Admin
 from flask_login import current_user, login_user, logout_user, login_required
